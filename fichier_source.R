@@ -6,3 +6,5 @@ myfunction <- function(x) {
 second  <-  function(x) {
   x+rnorm(length(x))
 }
+
+print("imprime en sourcant le fichier")

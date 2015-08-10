@@ -1,6 +1,8 @@
-# setwd("~/Dropbox/Datascience") set working directory
+setwd("~/Dropbox/Datascience/Universite_Johns-Hopkins/La_programmation_en_R/RBasics") # set working directory
 getwd() # Get working directory 
-source("myfunction.R")
+
+source("fichier_source.R")  # Analyse puis ??valuation s??quentielle...
+?source
 
 dir("~/Dropbox/Datascience") # donne les fichiers du "directory" / repertoire sp??cifie 
 length(dir("~/Dropbox/Datascience"))
@@ -51,11 +53,11 @@ length(x)
 # ----------------------------------------------------------
 # 5 classes de base d'objet : 
 # "character", 
-# "numeric", r??els double sur 8 bit, Inf et NaN
+# "numeric", reels double code sur 8 byte (8 octet de 8 bit), Inf et NaN
 # "integer", 
 # "complex", nombres complexes
 # "logical", TRUE ou FALSE (ou NA....)
-
+?vector()
 vector()
 vector(mode = "logical", length = 2)
 v <- vector(mode = "logical", length = 2)
@@ -84,8 +86,11 @@ class(NaN)
 class(NA)       # "logical" bof... d??pend peut ??tre de n'importe quel type
 # Attributs
 # names, dimnames, dim, class, length...
+?cbind
 y <- cbind(a = 1:3, pi = pi) # combine les colonnes ... pour creer matrix with dimnames
 y
+z <- cbind(a = 1:3, b = 1, c= 2) # combine les colonnes ... pour creer matrix with dimnames
+z
 attributes(y)
 class(y)
 class(x)
@@ -149,9 +154,9 @@ y <- c("1", 2)        ##  Character vector.... idem T converti en "TRUE" et les 
 y
 class(y)
 
-# En r??sum?? ..... character gagne sur complex, numeric, interger, logical
+# En rResume..... character gagne sur complex, numeric, interger, logical
 # ............... complex gagne sur numeric, interger, logical
-# ............... complex gagne sur interger, logical
+# ............... numeric gagne sur interger, logical
 # ............... interger gagne sur logical
 
 
@@ -164,6 +169,13 @@ class(y)
 as.logical(x) # 0 est converti en FALSE, les autres valeurs en TRUE
 as.character(x)
 as.complex(x) # partie imaginaire a 0
+
+x <- "a"
+y <- as.numeric(z)
+y
+class(y)
+
+# Lorsque la conversion explicite est impossible... rempl par NA
 
 x <- c("a","b","c")
 x
@@ -180,21 +192,27 @@ y <- as.integer(x) # 1,2,3..
 y
 class(y)
 
+y <- as.complex(x) # 1,2,3..
+y
+class(y)
 
-# donc "1",1 -> conv implicite 1,1 mais "1" peut ??tre explicitement conv en 1
 
-# les listes peuvent contenir des objets de classes diff??rentes
+# donc "1",1 -> conv implicite "1","1" mais "1" peut etre explicitement conv en 1
+
+# les listes peuvent contenir des objets de classes differentes classes
 x <- list(1,"a",TRUE,1+3i)
 x
 class(x)  # Class "list"
 attributes(x)
 names(x)
-x <- list(1,"a",TRUE,1+3i,F,3,"text")
+x <- list(1:30,"a",TRUE,1+3i,F,3,"text")
 x
 names(x) <- c("a","b","c","d","e","f","g")
 x
 attributes(x)
 names(x)
+
+x
 
 # c'est une liste de vecteurs
 
@@ -214,7 +232,7 @@ attributes(x)
 # les matrices sont construite par colonnes....
 m <- matrix(1:6, nrow = 2, ncol = 3)
 m
-
+length(m)
 
 # ----------------------------------------------------------
 # creation de matrice a partir d'un vecteur 
@@ -229,14 +247,15 @@ attributes(m)
 dim(m)
 
 
-m <- 1:20
+m <- 1:30
 m
 class(m)
-dim(m) <- c(2,5,2)  # 2*5*2 = 20...  par colonnes
+dim(m) <- c(2,5,3)  # 2*5*2 = 20...  par colonnes
 m # c'est donc bien un vecteur avec un attribut dim...
 class(m)  # la classe devient "array" avec l'ajout de l'attribut dim de length > 2
 attributes(m)
 dim(m)
+length(m)
 # ----------------------------------------------------------
 # creation de matrice par combinaison de ligne ou colonnes
 x <- 1:3
@@ -269,7 +288,7 @@ x <- factor(c("yes","yes","no","yes","no"))
 x
 class(x)
 attributes(x)
-# noter pas printout comme un veecteur carac ::: pas les ""...les val.. et l'attribut levels
+# noter pas printout comme un vecteur carac ::: pas les ""...les val.. et l'attribut levels
 levels(x)
 class(x)
 table(x)  # function table() avec un factor en argument donne le nb de chaque level
@@ -307,12 +326,21 @@ class(z)
 
 z <- factor(z)
 class(z)
-
+z
 # Pour ordonner les niveaux
 x <- factor(c("yes","yes","no","yes","no"), levels = c("yes","no"))
 x
 unclass(x)  # noter le codage ...
 # Baseline level : le premier.... important in linear modeling
+
+x <- factor(c("yes",1,"abaaa","zz","zz",10,10,"10"))
+x
+table(x)
+attributes(x)
+levels(x)
+unclass(x)
+
+
 
 
 # ----------------------------------------------------------
@@ -332,6 +360,7 @@ is.nan(m)
 
 x <- c(1,2,NA,10,3)
 x
+class(x)
 is.na(x)
 is.nan(x)
 x <- c(1,2,NaN,10,3)
@@ -342,18 +371,19 @@ x <- c(1,2,NA,10,3,0/0,1/0)
 x
 is.na(x)
 is.nan(x)
+# Noter que Inf n'est pas une valeur manquante
 
 # ----------------------------------------------------------
 # Data Frames 
 # ----------------------------------------------------------
-# special type of list..(les listes sont des liste de vecteurs).. chaque elt de m??me taille
+# special type of list..(les listes sont des liste de vecteurs).. chaque elt de meme taille
 # liste de vecteur colonnes.. toute de taille nb de ligne.. de type diff (integer, factor, charac...)
 # Un attribut special row.names
 # Chaque ligne a un nom...(unicite???)
 
 # Creation par read.table() ou read.csv()
 
-# Peuvent ??tre converties en matrice avec data.matrix() mais conversion....type unique...
+# Peuvent etre converties en matrice avec data.matrix() mais conversion....type unique...
 
 x <- data.frame(foo = 1:4, bar = c(T,F,T,F))
 x
@@ -365,7 +395,26 @@ row.names(x)
 names(x)
 
 
-unclass(x) # est une liste ?? la base
+unclass(x) # est une liste a la base
+
+y <- list(foo = 1:4,bar = c(T,F,T,F))
+y
+class(y)  # Class "data.frame"
+attributes(y) # class, names, row.names
+names(y)
+
+y <- data.frame(y)
+y
+class(y)
+
+y <- list(foo = 1:4,bar = c(T,F,T))
+y
+class(y)  # Class "data.frame"
+attributes(y) # class, names, row.names
+names(y)
+y <- data.frame(y)  # ERROR longueur diff
+
+
 
 # ----------------------------------------------------------
 # Names attributes Frames 
@@ -404,14 +453,14 @@ class(m)
 # read.csv()
 alc2 <- read.csv2("alcool.csv")
 alc <- read.csv("alcool.csv")
-alc3 <- read.table("alcool.csv")
+alc3 <- read.table("alcool.csv", sep=";")
 # Retournent des dataframes
-vl <- readLines("myfunction.R") # Lire les lignes d'un texte
+vl <- readLines("fichier_source.R") # Lire les lignes d'un texte
 vl
 length(vl)
 vl[2]
 # Renvoit un vecteur de caractere
-source("myfunction.R")  # Pour lire du code R pas seult des fonctions
+source("fichier_source.R")  # Pour lire du code R pas seult des fonctions
 
 # dget()    # R code dparsed ???? into text files
 
@@ -474,24 +523,24 @@ tabAll <- read.table("alcool.csv", T,";", colClasses = classes)
 
 nrow(tabAll)
 databis <- read.table("alcool.csv", T,";",nrows = 200)
-nrow(databis) #s'arr??te avant...
+nrow(databis) #s'arrete avant...
 
-# set nrows mieux pour optim la m??moire. peut ??tre surestim??
+# set nrows mieux pour optim la memoire. peut etre surestime
 
-# Connaitre m??moire disponible, ... OS ... 32 or 64 bit
+# Connaitre memoire disponible, ... OS ... 32 or 64 bit
 
 # Ex. calc 1.500.000 rows 120 column
 # 1.500.000*120*8 bytes/num
-# 1440000000 bytes / 2puis20 bytes / MB donne 1.373.29 MB = 1.34 GB
+# 1.440.000.000 bytes / 2 puissance 20 bytes / MB donne 1.373.29 MB = 1.34 GB
 
 
-# Les doubles utilisent 8 octets (de 8 bits) en m??moire
+# Les doubles utilisent 8 octets (de 8 bits) en memoire
 # en supposant que les elements ont cette taille...
 # 1.500.000 * 120 * 8 octets
-# 1 GB Gigabytes ou Gigaoctet = 10 puissance 9 octet (ou en fait 2 puissance 20)
-# 1.500.000*120*8 / 1.000.000.000 # 1,5 GB (1,34 en fait)
+# 1 GB Gigabytes ou Gigaoctet = 10 puissance 9 octet (ou historiquement  2 puissance 20 apell?? gibioctet)
+# 1.500.000*120*8 / 1.000.000.000 # 1,5 GB (1,34 Gibioctet)
 
-# Considerer un facteur 2 necessaire soit 2,7 GB...
+# Considerer un facteur 2 necessaire soit 2,7 GB...(mon Mac a 4 Go)
 
 # ----------------------------------------------------------
 # Textual Data Format 
@@ -514,8 +563,8 @@ summary(alc5)
 
 
 # dump()
-# peut ??tre utiliser pour multiple R object contrairement ?? dput
-# ?? passer sous forme de vecteur avec les noms
+# peut etre utilise pour multiple R object contrairement a dput
+# a passer sous forme de vecteur avec les noms
 
 dump(c("alc4","y"),file = "data.R")
 source("data.R")
@@ -569,10 +618,10 @@ close(con)
 # Subsetting R Objects: Basics
 # ----------------------------------------------------------
 # [, [[, $
-# [], retourne un objet toujours de m??me class que l'original
+# [], retourne un objet toujours de meme class que l'original
 # vector -> vector, list -> list (une execption "matrix" et "data.frame")
 # [[]] used to extract a single elements from a list or a data frame
-# $ used to extract elements of a list or a datafra??e by names
+# $ used to extract elements of a list or a dataframe by names
 
 x <- c("a","b","c","d","e","f")
 x
@@ -593,7 +642,7 @@ x
 names(x) <- c("a","b","c","d","e","f","g","h")
 x
 class(x)
-x["e"]
+x["e"]  # Par le nom
 class(x["e"])
 x$e # ERROR.... $ operator is invalid for atomic vectors
 
@@ -619,17 +668,19 @@ class(x[2])
 
 x[[1]] # donne l'element 1 donc  vecteur integer
 class(x[[1]])
-x$bar # donne l??l??ment bar donc vecteur numeric
+x$bar # donne l element bar donc vecteur numeric
 class(x$bar)
-x[["bar"]] # donne l'element "1"bar" donc  vecteur integer
-x[[2]] # donne l??l??ment 2 donc vecteur numeric
+x["bar"] # donne liste idem x[1]
+class(x["bar"])
+x[["bar"]] # donne l'element bar" donc  vecteur integer
+x[[2]] # donne l element 2 donc vecteur numeric
 class(x[[2]])
 
 x$foo # donne l'element foo
 x["foo"] # donne une liste de l'element foo
 class(x["foo"])
 
-# Extraction d'??l??ments multiples
+# Extraction d'element multiples
 # seulement possibles avec [] operator.... pas [[]] ou $
 x <- list(foo = 1:4, bar = 0.6, baz = "hello")
 x
@@ -639,7 +690,7 @@ x[c(T,F,T)] # avec indexation logique
 name <- "foo" # Dans le cas ou l'on passe par une variable [[]]
 name
 [name]
-x[[name]]   # Renvoi l'??l??ment d'index la valeur de name...donc foo soit un vecteur integer 
+x[[name]]   # Renvoi l'element d'index la valeur de name...donc foo soit un vecteur integer 
 x$name   # NULL
 x$foo  # idem x[[name]] ou x[["foo"]]Pour utiliser le $ il faut un symbol "literal"
 x[["foo"]]
@@ -649,7 +700,7 @@ x
 x[[c(1,3)]] # renvoie le 3 eme elt du 1 er elt de lq liste ...recursif?
 x[c(1,3)] # renvoie une liste contenant la 1 et la 3 eme liste
 x[[1]][[3]] # liste de liste donc ok renvoie elt3 de elt1
-x[[c(2,1)]] # Renvoie le premier ??l??ment du deuxi??me ??l??ment de la liste
+x[[c(2,1)]] # Renvoie le premier element du deuxieme element de la liste
 x[[2]][1] # liste de liste et vecteur donc ok
 class(x[[2]])
 class(x[[1]])
@@ -660,7 +711,7 @@ class(x[[1]])
 
 x <- matrix(1:6, 2, 3)
 x
-x[1,2]  # N?? ligne, N?? colonne
+x[1,2]  # 1ere ligne, 2eme colonne
 x[3] # etonnant renvoi l'element 3 de lamatrice vue comme un vecteur
 x[6] # etonnant renvoi l'element 6 de lamatrice vue comme un vecteur
 
@@ -678,10 +729,10 @@ x[2, ,drop = FALSE]   # "Un vecteur"matrix...ligne
 
 x[,]    # "matrix"
 x[,1, drop = FALSE]  # Un vecteur...
-x[1,1:2]      # vecteut
+x[1,1:2]      # vecteur
 class(x[1,1:2]) # exception....!!
-x[1,1:2, drop =FALSE]      # vecteut
-
+x[1,1:2, drop =FALSE]      # matrix
+class(x[1,1:2, drop =FALSE])    
 
 x[[2,2]]  # N?? ligne, N?? colonne
 
@@ -784,7 +835,7 @@ x >= 2
 y == 8
 x * y
 z <- 1:3
-x+z # Warning - recyclkage partiel de z plus petit...
+x+z # Warning - recyclage partiel de z plus petit...1
 x/y
 
 x <- matrix(1:4, 2,2) ; y <- matrix(rep(10,4),2,2)
@@ -801,7 +852,7 @@ x %*% y # Produit de deux matrices
 
 z <- c(1.1, 9, 3.14)
 c(z,555,z)
-abs(z) # op??ration vectoris??e
+abs(z) # operation vectorisee
 sqrt(z)
 z^2
 c(1, 2, 3, 4) + c(0, 10) # recyclage de vecteurs...
@@ -825,7 +876,7 @@ names(data)
 # Question 12 : Extract the first 2 rows of the data frame and print them to the console. 
 # What does the output look like?
 data[1:2,]
-
+class(data[1:2,])
 # Question 13 : How many observations (i.e. rows) are in this data frame?
 nrow(data)
 
@@ -841,7 +892,7 @@ my_seq <- seq((nrow(data)-1),nrow(data),1)
 my_seq
 # Question 15 : What is the value of Ozone in the 47th row? 
 data[47,"Ozone"]
-
+data[[47,"Ozone"]]
 # Question 16 : How many missing values are in the Ozone column of this data frame?
 # premiere methode
 missing <- is.na(data[,"Ozone"])
@@ -853,8 +904,10 @@ missing2
 length(data$Ozone[missing2])
 # methode 3
 table(data$Ozone, useNA = "always") 
+summary(data)
 # Methode 4 - the best
-sum(is.na(data$Ozone))
+sum(is.na(data$Ozone)) #  Logical true values are regarded as one, false values as zero
+?sum()
 
 
 # Question 17 : What is the mean of the Ozone column in this dataset? Exclude missing values (coded as NA) from this calculation.
@@ -879,6 +932,7 @@ max(data$Ozone[data[,"Month"]==5], na.rm = TRUE)
 # ----------------------------------------------------------
 # SWIRL R Programming 2: Workspace and Files
 # ----------------------------------------------------------
+setwd("/Users/GA/dropbox/Datascience/Universite_Johns-Hopkins/La_programmation_en_R/RBasics")
 old.dir <- getwd()
 old.dir
 list.files() # equivalent de dir()
@@ -963,17 +1017,22 @@ num_vect >= 6
 
 my_char <- c("My","name","is")
 my_char
-paste(my_char, collapse = " ") # le s??parateur pour concatener
+paste(my_char, collapse = " ") # le separateur pour collapser les vecteurs...
+paste(c("My","name","is"), c("Mr","John","B"), collapse = "-") # le separateur pour concatener
+paste(my_char)
 paste(my_char, collapse = "x")
 paste(my_char, collapse = "")
+paste(my_char, collapse = NULL)
+?paste
 my_name <- c(my_char, "Greg")
 my_name
 paste(my_name, collapse = " ") # si 1 seul vecteur en arg donc conc...
 paste("Hello", "world!", sep = " ")
+paste("Hello", "world!")
 paste(1:3, c("X", "Y", "Z"), sep = "") # si deux, ... element a elt...
-paste(c("X", "Y", "Z"), c("X", "Y", "Z"), sep = "") # si deux, ... element a elt...
-paste(c("X", "Y", "Z","X", "Y", "Z"), sep = "") # si deux, ... element a elt...
-
+paste(c("X", "Y", "Z"), c("X", "Y", "Z"), sep = "-") # si deux, ... element a elt...
+paste(c("X", "Y", "Z","X", "Y", "Z"), sep = "-") # sep travail avec des vecteurs?...
+paste(c("X", "Y", "Z","X", "Y", "Z"), collapse = "-") # ......
 
 LETTERS
 paste(LETTERS, 1:4, sep = "-") # recycling vector petit...
@@ -1007,6 +1066,8 @@ my_data == NA # NA is not really a value !!!!
 class(my_data == NA) # Logical cependant...
 
 sum(my_na) # R represents TRUE as the number 1 and FALSE as the number 0
+my_data[!my_na]
+length(my_data[!my_na])
 
 # NaN, which stands for 'not a number'
 0/0
@@ -1022,6 +1083,9 @@ z <- rep(NA, 20)
 x <- sample(c(y, z), 40) # Selection de 40 elements au hasard dans un vecteur
 x
 x[1:10]
+a <- sample(c(y, z), 40) # Selection de 40 elements au hasard dans un vecteur
+m <- cbind(x,a)
+m
 
 # index vectors come in four different flavors -- 
 # - logical vectors, 
@@ -1035,8 +1099,14 @@ y
 y[y > 0]
 x[x > 0] # NA > 0 evaluates to NA
 x > 0
+m[x != 0,] # NA > 0 evaluates to NA... valeur perdue pour la ligne: ligne de NA...
+m
+
 
 x[!is.na(x) & x > 0]
+
+m[!is.na(x) & x > 0,]
+
 
 # R uses 'one-based indexing' le premier element est [1] indice 1 et non 0...
 x[c(3,5,7)]
@@ -1046,6 +1116,7 @@ x[3000]
 x[c(2, 10)]
 x[c(-2, -10)] # Tous les ??l??ments sauf les 2 et 10...
 x[-1000] # ....
+x
 x[-c(2,10)] # Idem x[c(-2, -10)]
 
 vect <- c(foo = 11, bar = 2, norf = NA)
@@ -1080,7 +1151,8 @@ identical(my_matrix,my_matrix2)
 
 patients <- c("Bill", "Gina", "Kelly","Sean")
 cbind(patients,my_matrix)
-# matrices can only contain ONE class of data !!!! conversion carac...
+# matrices can only contain ONE class of data !!!! conversion en caracteres...
+class(cbind(patients,my_matrix))
 
 
 my_data <- data.frame(patients, my_matrix)
@@ -1122,7 +1194,7 @@ TRUE || c(TRUE, FALSE, FALSE)
 
 6 != 10 && FALSE && 1 >= 2
 TRUE || 5 < 9.3 || FALSE
-# R??gles de priorit??
+# Regles de priorite
 # AND operators are evaluated before OR operators
 
 5 > 8 || 6 != 8 && 4 > 3.9
@@ -1141,6 +1213,7 @@ FALSE && 6 >= 6 || 7 >= 8 || 50 <= 49.5
 
 isTRUE(6 > 4)
 isTRUE(3)
+isTRUE(as.logical(3))
 !isTRUE(4 < 3)
 
 
@@ -1163,7 +1236,7 @@ help(sample)
 
 which(c(TRUE, FALSE, TRUE))
 which(ints > 5) # retourne les indices des valeurs TRUE
-# prend en param??tre un vecteur logique..retourne un vecteur integer
+# prend en parametre un vecteur logique..retourne un vecteur integer
 # interessant pour faire des boucles sur parties...
 
 any(ints<0) # retourne TRUE si l'un au moins des elt du vect est TRUE
@@ -1219,6 +1292,8 @@ my_mean <- function(my_vector) {
 }
 
 my_mean(c(2, 4, 5, NA))
+mean(c(2, 4, 5, NA))
+mean(c(2, 4, 5, NA),na.rm = TRUE)
 
 # modulus operator %% to find the remainder
 
@@ -1238,7 +1313,7 @@ remainder(4, div = 2)
 
 
 args(remainder) # Pour voir les arguments
-
+args(boring_function)
 
 
 # You can pass functions as arguments to other functions just like you can pass
@@ -1323,18 +1398,38 @@ evaluate(function(x){x[length(x)]}, c(8, 4, 0))
 # For example the expression `telegram("Good", "morning")` should evaluate to:
 # "START Good morning STOP"
 
+simon_says <- function(...){
+   paste("Simon says:", ...)
+}
+
+simon_says("High")
+simon_says("High", "hello")
+simon_says(c("High", "hello"))
+simon_says(c("High", "hello"), collapse = "--")
+simon_says(c("High", "hello"), sep = "", collapse = "--")
+
+
 telegram <- function(...){
   paste("START", ...,"STOP")
 }
 telegram("test","test2")
+telegram("test","test2", sep = ".")
 telegram(c("test","test2"))
+telegram(c("test","test2"), collapse = " ")
+telegram(c("test","test2"), sep = ".", collapse = "-")
+
 
 telegram <- function(arg1, arg2 = "arg2", ..., argn = "z"){
         paste("START", arg1, arg2,...,"STOP",argn)
 }
 telegram("test","test2")
 telegram("test")
-telegram("test","test2") # test 2 est donc consid??r?? comme le deuxi??me arg
+telegram("test","test2") # test 2 est donc considere comme le deuxieme arg
+telegram("test",sep = ".","test2") # test 2 est donc considere comme le deuxieme arg
+telegram("test",sep = ".","test2","test3") # test 2 est donc considere comme le deuxieme arg
+telegram("test",sep = ".",argn="test3","test2") # test 2 est donc considere comme le deuxieme arg
+
+
 telegram(",a",arg2 ="test")
 telegram("test","test2", argn = "OOO")
 telegram("test","test2", "OOO")
@@ -1388,12 +1483,20 @@ mad_libs <- function(...){
 
 mad_libs(place = "Paris", adjective = "qwer", noun = "nom")
 
+mad_libs(place = "Paris",  noun = "nom", "AAAAAAA")
+l<- list(place = "Paris", adjective = "qwer", noun = "nom", "AAAAA")
+l
+if("place" %in% names(l)) l <- l[ - which(names(l) == "place")]
+l
+names(l)
 
 mad_libs2 <- function(...){
         # Do your argument unpacking here!
         args <- list(...)
         place <- args$place
         adjective <- args$adjective
+
+        
         paste("News from", place, "today where", adjective, "students took to the streets in protest of the new...")
 }
 mad_libs(place = "Paris", adjective = "qwer", noun = "nom")
