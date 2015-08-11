@@ -22,16 +22,24 @@ if (condition) {
   2+5  
   "true"
 } else {
-  3+7   # ne sera pas affiché...
+  3+7   # ne sera pas affiche...
   print(3+7)
   "Faux"
 }
+
+{
+  3+7   # ne sera pas affiche...
+  "Faux"
+  "Vrai"
+}
+# Expression. tout est evalue mais seule la derniere instr est affichee
+
 
 condition
 condition2
 condition3 <- T
 
-# autant de else if que necessaire... else doit être à la fin
+# autant de else if que necessaire... else doit etre a la fin
 if (condition) {
   2+5  
   "true"
@@ -45,6 +53,19 @@ if (condition) {
   print('else final')
 }
 
+if (T) {
+  2+5  
+} else if (T) {
+  3+7
+} else if (F) {
+  print("condition 3")
+} else {
+  3+70
+  print('else final')
+}
+
+# Seul le premier TRUE est evalue
+
 
 x <- 5
 
@@ -54,13 +75,26 @@ if (x>3) {
 } else {
   y <- 0
 }
-
+y
 # Assignation de y avec toute la condition
 y <- if (x>3) {
   10
 } else {
   0
 }
+
+# Assignation de y avec toute la condition
+y <- if (x>3) {
+  10
+  z <- "high"
+  20
+  30
+} else {
+  0
+}
+
+y   # expressions.. seule la derniere est affichee...
+z
 
 # Else pas necessaire
 if (x>3) {
@@ -74,7 +108,7 @@ if (condition2) {
 # ----------------------------------------------------------
 # Week2 : For loops
 # ----------------------------------------------------------
-# couvre un séquence ou vector
+# couvre une sequence ou vector (une sequence est un vecteur numeric, ...)
 for (i in 1:10) {
   print(i)
 }
@@ -86,28 +120,44 @@ for(i in 1:4) {
 }
 
 class(x)
-seq_along(x) # cré une sequence d'entier de la taille du vecteur argument
+seq_along(x) # cr?? une sequence d'entier de la taille du vecteur argument
 class(seq_along(x))
 
 for(i in seq_along(x)) {
   print(x[i])
 }
 
+for(i in x) {
+  print(i)
+}
+
+
 for(letter in x) {
   print(letter)
 }
 
 # si seulement une expression dans la boucle crochets non necessaires
+# les {} sont des expressions, .....
 for(i in 1:4) 
   print(x[i])
 
 # avec une liste un factor un data frame?
 x <- factor(c("yes","aaa","abaaa","zz","zz"))
+class(x)
+x
 for(y in x) {
-  z <- class(y) # attention dans les boucles les instructions ne sont pas auto printées?
+  z <- class(y) # attention dans les boucles les instructions ne sont pas auto print??es?
   print(z) # explicitement ...
   print(y)
 }
+
+x <- factor(c(1,23,34,56))
+for(y in x) {
+  z <- class(y) # attention dans les boucles les instructions ne sont pas auto print??es?
+  print(z) # explicitement ...
+  print(y)
+}
+
 
 alc4 <- read.table("alcool.csv", T, ";")  # file name, header T/F, separateur
 for(y in alc4) {
@@ -123,8 +173,8 @@ for(y in alc4) {
 
 # Imbrication
 x <- matrix(1:6, 2,3)
-
-seq_len(nrow(x)) # cré une séquense de longueur specifiée
+x
+seq_len(nrow(x)) # cree une sequense de longueur specifiee
 
 for (i in seq_len(nrow(x))) {
   for (j in seq_len(ncol(x))) {
@@ -140,7 +190,7 @@ for (i in seq_len(nrow(x))) {
 }
 
 
-# Attention avec 2 ou 3 niveaux c'est diff à lire
+# Attention avec 2 ou 3 niveaux c'est difficile a lire
 
 # ----------------------------------------------------------
 # Week2 : While loops
@@ -152,16 +202,17 @@ while(count < 10) {
   count <- count +1
 }
 
-# Attention à la condition d'arrêt... plus sur d'utiliser for loop si possible
+# Attention a la condition d'arret... plus sur d'utiliser for loop si possible
 
 
 z <- 5
 
 help(rbinom)
+rbinom(1,1,0.5)
 
 while (z >=3 && z <= 10) {
   print(z)
-  coin <-  rbinom(1,1,0.5) # tirage à pile ou face
+  coin <-  rbinom(1,1,0.5) # tirage a pile ou face une fois
   coin
   print("----------coin----------")
   print(coin)
@@ -173,7 +224,7 @@ while (z >=3 && z <= 10) {
   }
 }
 
-# pour info la condition est evaluee de gauche à droite...
+# pour info la condition est evaluee de gauche a droite...
 
 # ----------------------------------------------------------
 # Week2 : Repeat, next, break
@@ -230,6 +281,7 @@ above10 <- function(x) {
 }
 
 above10(1:20)
+x
 above10(x)
 above10(5*x)
 
@@ -241,12 +293,14 @@ above <- function(x,n) {
 above(10,6)
 above(1:20,4)
 above(10)
-# Valeur par défaut des paramètres
+# Valeur par d??faut des param??tres
 above <- function(x,n = 10) {
   use <- x > n
   x[use]
 }
 above(11)
+above(10)
+above(9)
 
 # Calcul de la moyenne de chaque colonne d'une matrice ou d'un data frame
 
@@ -365,14 +419,14 @@ myplot <- function(x,y,type = "1", ...) {
   plot(x,y,type=type,...)
 }
 
-# 2) generic functions ??? do nothing but dispach data, ...
+# 2) generic functions do nothing but dispach data, ...
 
 # 3) when number of arg cannot be known in advanced...
 
 args(paste)
 args(cat)
 
-# les arguments venant après "..." doivent être només explicitement et exactement 
+# les arguments venant apres "..." doivent etre nomes explicitement et exactement 
 
 paste("a","b", sep =":")
 paste("a","b", se =":") # attention pas de partial matching...
@@ -396,10 +450,10 @@ search()[2]
 
 # base package always at the end
 
-# a chaque load le package vient en position 2 après global evt
+# a chaque load le package vient en position 2 apres global evt
 
 # noter qu'il y a des noms pour les functions et les autre obj
-# donc une variable peut s'appeller lm sans confli avec lm()...
+# donc une variable peut s'appeller lm sans conflit avec lm()...
 
 sd <- 1
 sd
@@ -419,13 +473,13 @@ f <- function (x,y) {
 }
 
 # Lexical scoping in R means that 
-# Les valeur des variables libres sont cherchées dans l'environnement 
-# dans lequel la fonction a été définie
+# Les valeur des variables libres sont cherchees dans l'environnement 
+# dans lequel la fonction a ete definie 
 
 # Un evironement est une collection de paires (symbol, value)
 # Chaque environnement a un environnement pere, 
 # Il est possible d'avoir plusieurs environemenrts fils, ...
-# Seul l'environnement vide n'a pas de père
+# Seul l'environnement vide n'a pas de pere
 # Une fonction + environnement = "closure" ou "function closure"
 
 
@@ -485,12 +539,33 @@ make.power <- function(n) {
 }
 
 # fonction qui construit des fonctions
-cube <- make.power(3)           # dans l'env de def n vaut 3...
+cube <- make.power(3)           # dans l'env de definition n vaut 3...
+cube(8)
+n <- 2
+cube(8)
+
+cube <- make.power(3)           # dans l'env de definition n vaut 3...
+
 square <- make.power(2)
 squareroot <- make.power(0.5)
 class(cube)
 cube(2)
 squareroot(2)
+
+n <- 1
+make.power.glob <- function() {
+  pow.glob <- function(x) {
+    x^n
+  }
+  pow.glob
+}
+
+n <- 10
+cube <- make.power.glob()           # dans l'env de definition n vaut 10...
+cube(2)
+
+n <- 1
+cube(2)         # dans l'env de definition n vaut 1 maintenant...
 
 
 # analyser l'environnement
@@ -513,9 +588,17 @@ g <- function(x){
 
 f(3)
 
+get("y",environment(f))
+get("y",environment(g))
+
+
+
+
+
 # dynamic scoping : se serait l'environnement appelant (parent frame) qui compte donc y =2
 
-# NB si evt d'appel et de def estle même
+# NB si evt d'appel et de def estle meme
+k <- 3
 
 g <- function(x) {
   a<-3
@@ -526,26 +609,26 @@ g(2)
 k<-2
 g(2)
 
-# attention k est defini dans l'environnement de def qui est le même que celui de l'appel
+# attention k est defini dans l'environnement de def qui est le meme que celui de l'appel
 
 # Lexical scoping : Perl, Python, Common Lisp
 
-# La conséquence est que tous les objets doivent être stockés en mémoire.
-# Chaque fonction doit maintenir unpointeur vers son environement de définition
+# La consequence est que tous les objets doivent etre stockes en memoire.
+# Chaque fonction doit maintenir unpointeur vers son environement de definition
 
 # ----------------------------------------------------------
 # Week2 : Scoping Rules - Optimization exemples
 # ----------------------------------------------------------
 
 # optim, nlm, optimize
-# passer un fonction dont l'argument est un vecteur de paramètres
+# passer une fonction dont l'argument est un vecteur de parametres
 
-# Par exemple les min ou max dépendent non seulement des param
+# Par exemple les min ou max dependent non seulement des param
 # mais aussi des data
-# certains paramètres sont fixés.. 
+# certains parametres sont fixes.. 
 
-# Créer un constructeur de fonction qui construit la fonction objectif
-# donc toutes les données dans le defining evt...
+# Creer un constructeur de fonction qui construit la fonction objectif
+# donc toutes les donnees dans le defining evt...
 make.NegLogLik <- function(data, fixed=c(FALSE,FALSE)) {
   params <- fixed
   function(p) {
@@ -606,6 +689,8 @@ y <- as.Date("1971-12-06")
 y
 class(x)
 unclass(x)
+unclass(y)
+
 unclass(as.Date("1970-01-02"))
 unclass(as.Date("1971-01-02"))
 
@@ -615,6 +700,8 @@ unclass(as.Date("1971-01-02"))
 weekdays(y)
 months(y)
 quarters(y)
+julian(y)
+?months()
 
 class(months(y))
 
@@ -645,7 +732,7 @@ class(x)
 x$sec # ERR il faut d'abord convertir en POSIXlt...
 
 # !!! dans la langue locale ....
-datestring <- c("Janvier 10, 2012 10:40","Decembre 9, 2011 9:10")
+datestring <- c("January 10, 2012 10:40","December 9, 2011 9:10")
 datestring
 help(strptime)
 x <- strptime(datestring)
@@ -654,6 +741,9 @@ x <- strptime(datestring,"%B %d, %Y %H:%M")
 x
 class(x) # "POSIXlt"
 
+datestring <- c("January 10, 2012 10:40")
+x <- strptime(datestring,"%B %d, %Y %H:%M")
+x
 x <- as.Date("2012-01-01")
 y <- strptime("9 Jan 2011 11:34:21","%d %b %Y %H:%M:%S")
 y
@@ -701,6 +791,7 @@ x
 
 
 f <- function(x) {
+        z <- 30
         g <- function(y) {
                 y + z
         }
@@ -708,10 +799,10 @@ f <- function(x) {
         x + g(x)
 }
 
-z <- 10
+z <- 15
 f(3)
-# z vaut 4 dans l'environnement de définition de g
-# même si c'est plus tard dans le code
+# z vaut 4 dans l'environnement de definition de g
+# meme si c'est plus tard dans le code
 
 
 
@@ -830,7 +921,7 @@ pollutantmean <- function(directory, pollutant, id = 1:332, debug = FALSE) {
                 file_name
         }
         
-        # Boucle sur la séquence d'indice
+        # Boucle sur la s??quence d'indice
         for (i in id) {
                 file_name <- paste(directory,"/",convid(i), sep = "")
                 if (debug) {
@@ -955,3 +1046,4 @@ corr <- function(directory, threshold = 0) {
         
         
 }
+

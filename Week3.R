@@ -30,7 +30,7 @@ x <- 1:4        # vector de longueur 4
 x
 as.list(x)
 help(runif)
-runif(4)        # runif(x) genère x valeur entre 0 et 1 uniforme distri
+runif(4)        # runif(x) genere x valeur entre 0 et 1 uniforme distri
 class(runif(4))
 lapply(x,runif) # x est converti en liste avec as.list(x)...
 
@@ -94,8 +94,8 @@ str(apply)
 
 x <- matrix(rnorm(200),20, 10)
 x
-apply(x, 2, mean)       # preserve dim 2 ie colonnes collapse ligne
-apply(x, 1, sum)        # preserve lignes clollapse colonnes
+apply(x, 2, mean)       # preserve dim 2 ie colonnes collapse ligne...moy des col
+apply(x, 1, sum)        # preserve lignes clollapse colonnes dont somme des lignes
 
 
 # for sums and means of matrix dimensions, optimized functions:
@@ -136,8 +136,8 @@ attributes(a)
 
 apply(a, c(1,2), mean) # preserve les dim 1 et 2, calcule sur la 3
 
-rowMeans(a, dims =2) # ??? pas simple de comprendre le 2
-rowMeans(b, dims =2) # dims = 2 dimensions are regarded as ‘rows’ or ‘columns’ to sum ove ...bof
+rowMeans(a, dims =2) # ??? pas simple de comprendre le 2... les 2 premieres?
+rowMeans(b, dims =2) # dims = 2 dimensions are regarded as ???rows??? or ???columns??? to sum ove ...bof
 help(rowMeans)
 
 apply(a, 1, mean) # preserve les dim 1  calcule sur la 2x3
@@ -166,12 +166,15 @@ str(mapply)
 x <- 1:4
 y <- 6:9
 mapply(function(a,b) a+b, x,y)
-# cohérence entre le nombre d'argument de ka fonction et le nombre de liste
+# coh??rence entre le nombre d'argument de ka fonction et le nombre de liste
 
 rep(1:4)
 help(rep)
 list(rep(1,4),rep(2,3),rep(3,2),rep(4,1))
 mapply(rep,1:4,4:1)     # rep prend deux arguments... donc deux listes
+
+rep(1:4,2)
+rep(1:4,4:1)
 
 noise <- function(n,mean,sd) {
         rnorm(n,mean,sd)
@@ -199,7 +202,7 @@ list(noise(1,1,2), noise (2,2,2),noise(3,3,2), noise(4,4,2),noise(5,5,2))
 str(tapply)
 # Apply a function on a subset of a vector
 # X vector
-# INDEX même taille factor ou liste de facor ou convertible en factor 
+# INDEX m??me taille factor ou liste de facor ou convertible en factor 
 # FUN
 
 hist(runif(10000))
@@ -246,7 +249,7 @@ str(split)
 split(x,f)
 
 
-lapply(split(x,f),mean) # on peut ensuite applique lapply ou sapply à la liste
+lapply(split(x,f),mean) # on peut ensuite applique lapply ou sapply ?? la liste
 
 library(datasets)
 head(airquality)
@@ -301,7 +304,7 @@ str(warning)
 str(stop)
 warning()
 
-# conditions : generic concept... nouvelles peuvent être créées
+# conditions : generic concept... nouvelles peuvent ??tre cr????es
 # ex mess war err conditions...
 
 # Warning
@@ -347,7 +350,7 @@ printmessage2 <- function(x) {
 
 
 # traceback()
-# à appeller juste après l'erreur....
+# ?? appeller juste apr??s l'erreur....
 z
 mean(z)
 traceback()
@@ -355,7 +358,7 @@ traceback()
 lm(x~y)
 traceback()
 
-debug(lm) # possible d'appeller aussi à l'intérieur du debugeur
+debug(lm) # possible d'appeller aussi ?? l'int??rieur du debugeur
 lm(x~y)
 
 undebug(lm)
@@ -394,7 +397,7 @@ sum(complete.cases(iris)) == nrow(iris)
 # Week3 : what is the mean of 'Sepal.Length' for the species virginica?
 # ----------------------------------------------------------
 
-# première methode
+# premi??re methode
 mean(iris$Sepal.Length[iris$Species == "virginica"], na.rm = TRUE)
 
 # methode avec split et lapply
@@ -412,7 +415,7 @@ s$virginica$Sepal.Length
 mean(s$virginica$Sepal.Length, na.rm = TRUE)
 
 
-# Deuxième methode avec vecteur et tapply
+# Deuxi??me methode avec vecteur et tapply
 
 str(tapply)
 iris$Sepal.Length # vecteur
@@ -561,7 +564,7 @@ class(plants)
 dim(plants)
 nrow(plants)
 ncol(plants)
-object.size(plants) # donne la taille en mémoire
+object.size(plants) # donne la taille en m??moire
 names(plants)
 head(plants)
 head(plants,10)
@@ -650,7 +653,7 @@ Sys.time() > t1
 
 Sys.time() - t1
 
-difftime(Sys.time(), t1, units = 'days') # pour préciser les unités
+difftime(Sys.time(), t1, units = 'days') # pour pr??ciser les unit??s
 
 # si beaucoup date, ...check out the lubridate package by Hadley Wickham
 
@@ -707,3 +710,4 @@ mtcars <- dget("mtcars.R")
 hist(mtcars$mpg)
 # next study the ggplot2 package
 # (http://www.ling.upenn.edu/~joseff/rstudy/week4.html)
+
